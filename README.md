@@ -6,7 +6,7 @@ Note: This README is a work in progress as well as the rest of the repository. I
 - I am turning my simulation runs into ipython notebooks, stored in the "Notebook" folder instead of making changes to the src code. If one wants to run these on Oscar, though, it will require running the job as an "interactive job". The Caveat is that if the connection is lost, the job will be terminated.
 Alternatively, one can turn it into a regular python code and run as a batch job. The advantage is to be able to display results in the notebook along with the code without having to run it again. Will be good for the paper.
 - venv contains the virtual environment I work with, where I experimented with packages and their different versions without having to change packages in my own computer or Oscar user environment.  
-I am not sure if one can activate it right away and work in the same environment but I think it is possible with the command $source venv/bin/activate as long as virtualenv package is installed.
+I am not sure if one can activate it right away and work in the same environment but I think it is possible with the command $source venv/bin/activate as long as virtualenv package is installed (update: tried, doesn't work. But activating the venv and then installing the requirements with pip install requirements.txt works).
 - Deleted simulation data from Simulation_data/ folder due to UKBiobank data privacy but the guide files for sparse connections are in Simulation_data folder . The glist-hg19 (SNP-to-gene guide) and KEGG_guide (gene-pathway guide) will stay the same but the .map file will change based on what data we are working with.
 
 ### DEPENDENCIES
