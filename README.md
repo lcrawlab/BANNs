@@ -53,5 +53,6 @@ My idea for user-friendliness was to run a GUI at the start, where the user can 
 This is not currently integrated with the rest of the code because when I tried to use it on Oscar with British N=10000 dataset in an interactive job and my connection to the cluster was cut (time-out?) and the job didn't complete running.
 I just don't like running interactive jobs on the cluster. But we could activate this if wanted. If not, the toggle will likely stay as a command line argument.
 
-
+#### Quick note: 
+If you send /subscribe github lcrawlab/ML-GSEA in our Slack channel, you'll subscribe to updates on this repo.
 
