@@ -1,0 +1,2 @@
+export(autocorr.mat, GenCorBernoulli, GHC, HCindep, LinearModelScoreTest, ProgressBar, GHC_GWAS_SSD)
+import(SKAT)
