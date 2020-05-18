@@ -10,7 +10,6 @@ Note: It is important that the ordering of SNPs in the .map/.bim file is consist
 
 # Packages we depend on
 import pandas as pd
-# import pandas as pd
 import numpy as np 
 from tqdm import tqdm #just for progress bars 
 import natsort as ns #natural sorting 
@@ -62,14 +61,16 @@ def read_gene_file(path_geneGuide):
 
 def generate_intergenicDF(SNPList,geneList):
 	"""
-	Generate a dataframe for intergenic regions to be merged with the gene dataframe
-	Used for intergenic annotations
+	Generate a dataframe for intergenic regions (including end and start of a chromosome upstream/downstream of genes) 
+	to be merged with the gene dataframe. Used for intergenic annotations
 	"""
 	prevChr="-1"
 	intergenicDF=pd.DataFrame(columns=["Chromosome","Start","End","GeneID"])
 	maxEnd=np.amax(SNPList["Position"].tolist())
 
-	for index, row in geneList.iterrows():
+	print("creating intergenic DF")
+
+	for index, row in tqdm(geneList.iterrows()):
 
 		# Look up the next chromosome
 		if index == len(geneList)-1:
@@ -125,7 +126,9 @@ def annotateGenes(SNPList, geneList, buffer=0):
 	dfAnnotation=dfAnnotation.append(pd.Series(["UnAnnotated"], index=['GeneID'], name=len(dfAnnotation)))
 	dfAnnotation["SNPindex"]= [[] for _ in range(len(dfAnnotation))]
 
-	for index, row in SNPList.iterrows():
+	print("annotating genes")
+
+	for index, row in tqdm(SNPList.iterrows()):
 		SNPidx=index #integer
 		SNPchr=row["Chromosome"]#string
 		SNPpos=row["Position"] #integer
@@ -149,7 +152,8 @@ def annotateGenes_intergenic(SNPList, geneList, buffer=0):
 
 def getGeneMask(geneAnnotationDF,N,p):
 	mask=np.zeros(shape=[N,p])
-	for index, row in geneAnnotationDF.iterrows():
+	print("creating mask")
+	for index, row in tqdm(geneAnnotationDF.iterrows()):
 		SNPidx=row["SNPindex"]
 		for i in SNPidx:
 			mask[i,index]=1
@@ -169,8 +173,12 @@ def annotate(path_SNPList,path_geneGuide, SNP_filetype="map", intergenic=False, 
 	return annotationDF, mask 
 
 
-
-
+### Example script:
+# SNPList_path="/Users/pinardemetci/Desktop/RealData/FHS.txt"
+# geneList_path="/Users/pinardemetci/Desktop/BANNs/Data/glist-hg19.tsv"
+# annotationDF, mask=annotate(SNPList_path,geneList_path,SNP_filetype="bim", intergenic=True, buffer=0)
+# np.save("/Users/pinardemetci/Desktop/RealData/FRmask.npy", mask)
+# annotationDF.to_pickle("/Users/pinardemetci/Desktop/RealData/FRannotation.pkl")
 
 
 
