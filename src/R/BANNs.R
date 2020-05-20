@@ -1,7 +1,12 @@
 # @Author: Pinar Demetci, May 2020
 # Crawford Lab, Brown University CCMB
 # Variational EM optimization for BANN Framework
+library(Matrix)
+library(foreach)
+library(doParallel)
 
+cores = detectCores()
+registerDoParallel(cores=cores)
 
 ####### Read in data #########
 
@@ -260,7 +265,7 @@ BANNvarEM<-function(X,y, mask, centered=FALSE,numModels=30, tol=1e-4, maxiter=1e
   SIX.set <- as.matrix(solve(p,t(I.set) %*% (X%*%mask)))
   
   ### Finding the best initialization of hyperparameters:
-  for (i in 1:numModels){
+  foreach(i=1:numModels)%do%{
     print(i)
     out <- outerloop(X, I.snp, y, mask,xy, d, SIy.snp, SIX.snp, I.set,SIy.set, SIX.set,
                      tau.snp[i],sigma.snp[i],logodds.snp[,i],alpha.snp[,i],mu.snp[,i],update.order.snp,
@@ -296,7 +301,7 @@ BANNvarEM<-function(X,y, mask, centered=FALSE,numModels=30, tol=1e-4, maxiter=1e
   sigma.set <- rep(sigma.set[i.set],numModels)
   
   ### Compute marginal likelihood:
-  for (i in 1:numModels){
+  foreach(i=1:numModels)%do%{
     print(i)
     out <- outerloop(X, I.snp, y,mask, xy, d, SIy.snp, SIX.snp, I.set,SIy.set, SIX.set,
                      tau.snp[i],sigma.snp[i],logodds.snp[,i],alpha.snp[,i],mu.snp[,i],update.order.snp,
