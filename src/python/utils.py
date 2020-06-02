@@ -1,87 +1,110 @@
+
 import numpy as np
-import pandas as pd
-from annotation import *
-from customModel import *
 
-def getGeneMask(geneAnnotationDF,N,p):
-	mask=np.zeros(shape=[N,p])
-	for index, row in geneAnnotationDF.iterrows():
-		SNPidx=row["SNPindex"]
-		for i in SNPidx:
-			mask[i,index]=1
-	return mask
+def softplus(x):
+  return np.log(1+np.exp(x))
+
+def leakyrelu(x):
+  return np.where(x > 0, x, x * 0.01)  
+
+def relu(x):
+  return np.where(x > 0, x, 0)  
+
+def logpexp(x):
+  y=x
+  indices = [i for i,v in enumerate(x >= 4) if v]
+  for i in indices:
+    y[i] <- np.log(1 + np.exp(x[i]))
+  return y
+
+def sigmoid(x):
+  return (1/(1+np.exp(-x)))
+
+def logsigmoid(x):
+  return -logpexp(-x)
+
+def var1(x):
+  n=len(x)
+  res=np.var(x)*(n-1)/n
+  return res
+
+def var1_cols(x): ### NOTE: instead of "var1.cols" !!!
+  n=x.shape[1]
+  return np.var(x,axis=1)*(n-1)/n
+
+def rep_col(x,n):
+  return np.repeat(x, n).reshape(len(x),n)
+
+def rep_row(x,n):
+  return np.tile(x,(n,1))
+
+def rand(m,n):
+  return np.random.uniform(0, 1, size=(m, n))
+
+def randn(m,n):
+  return np.random.normal(0, 1, size=(m, n))
+
+def dot(x,y):
+  return np.sum(x*y)
+
+def norm2(x):
+  return np.sqrt(dot(x,x))
+
+def betavar(p,mu,s):
+  return p*(s+(1-p)*(mu**2))
+
+def diagsq(X, a=None):
+  m=X.shape[0]
+  n=X.shape[1]
+  if a==None:
+    a=np.repeat(1,m)
+  y=np.repeat(0,n)
+  for j in range(0,n):
+    for i in range(0,m):
+      t=X[i,j]
+      y[j]=y[j]+(t*t*a[i])
+  return y 
+
+def varLoss(Xr, d, y, sigma, alpha, mu, s, sa, logodds):
+  linearLoss=(len(y)/2*np.log(2*pi*sigma) - norm2(y - Xr)^2/(2*sigma)-dot(d,betavar(alpha,mu,s))/(2*sigma))
+  kleffect=((sum(alpha) + dot(alpha,np.log(s/sa)) - dot(alpha,s + mu^2)/sa)/2 -dot(alpha,np.log(alpha+5e-52)) - dot(1 - alpha,log(1 - alpha+5e-52)))
+  loss=linearLoss+kleffect+np.sum((alpha-1)*logodds + logsigmoid(logodds))
+  return loss
+
+def normalizeLogWeights(logw):
+  c=np.max(logw)
+  w=np.exp(logw-c)
+  return (w/np.sum(w))
 
 
-def buildModel(p1,p2,mask,activation_fn):
-	layers = []
-	layers.append(SNP_Layer(p1, mask, activation=activation_fn))
-	# layers.append(tf.keras.layers.BatchNormalization())
-	layers.append(Gene_Layer(p2))
-	return layers
-
-def logits2pip(logits):
-	logits=np.asarray(logits)
-	exps=np.exp(logits)
-	pips=(exps/(1+exps))
-	return pips
-
-def computePVE_SNP(bnn,mask):
-  pip_logits=K.eval(bnn.model.layers[-2].variables[0])
-  snp_betas==K.eval(bnn.model.layers[-2].variables[1])
-  snp_bias==K.eval(bnn.model.layers[-2].variables[1])
-  numerator= (pip_logits*mask)*snp_betas
-  denominator=numerator+snp_bias
-  return(numerator/denominator)
-
-def computePVE_Genes(bnn):
-  pip_logits=K.eval(bnn.model.layers[-1].variables[0])
-  gene_betas==K.eval(bnn.model.layers[-2].variables[1])
-  gene_bias==K.eval(bnn.model.layers[-2].variables[1])
-  numerator= pip_logits*gene_betas
-  denominator=numerator+gene_bias
-  return(numerator/denominator)
+def linear_predictors(X, Z, b, alpha, mu):
+  numModels=alpha.shape[1]
+  Y=np.matmul(Z,b)+np.matmul(X,(alpha*mu))
+  return Y 
 
 
-##################################################################################################################################
-################################################  GET NEW INDICES FOR CAUSALS  ###################################################
-##################################################### (FROM SIMULATIONS) #########################################################
-def getCausalSNPidx(causals, mapfile):
-  """
-  Can take it either a ".map" file or a ".bim" file for SNPList. Needs to be specified. Default is ".map"
-  Sorted by chromosome and then location for ease of search.
-  """
-  causalSNPs=[]
-  SNPList=pd.DataFrame(pd.read_csv(mapfile, sep='\t', header=None))
-  SNPList.columns=["OldIndex","Chromosome","VariantID","Morgans","Position"]
-  SNPList.Chromosome = SNPList.Chromosome.astype('str') #For chromosomes like X, y etc, this has to be a string for ease of comparison
-  SNPList.Position = SNPList.Position.astype('int32') # Locations should be read as integers for ease of comparison in annotation
-  SNPList.sort_values(by=["OldIndex"], ascending=[True], inplace=True)
-  SNPList.sort_values(by=["Chromosome","Position"], ascending=[True,True], inplace=True)
-  for i in causals:
-    idx=SNPList.index[SNPList['OldIndex'] == i].tolist()
-    for  j in idx:
-      causalSNPs.append(j)
-  print(SNPList)
-  return causalSNPs
+def outerloop(X, I_snp, y,mask, xy,d,SIy_snp,SIX_snp,I_set,SIy_set,SIX_set,tau_snp,sigma_snp,logodds_snp,alpha_snp,mu_snp,update_order_snp,
+        tau_set,sigma_set,logodds_set,alpha_set,mu_set,update_order_set,tol,maxiter,outer_iter):
+  p=X.shape[1]
+  g=SIX_set.shape[1]
 
-def getCausalGenes(geneDF, causalSNPs):
-  causalGenes=[]
-  for index,row in geneDF.iterrows():
-    geneID=row["GeneID"]
-    geneindx=index
-    snps=row["SNPindex"]
-    causals=[i for i in snps if i in causalSNPs]
-    if len(causals)>0:
-      causalGenes.append(geneindx)
-  return causalGenes
+  if(len(logodds_snp)==1):
+    logodds_snp=np.repeat(logodds_snp,p)
+  if(len(logodds_set)==1):
+    logodds_set=np.repeat(logodds_set,g)
+  
+  res=innerLoop(X,y,mask,xy,d,tau_snp,sigma_snp,np.log(10)*logodds_snp,alpha_snp,mu_snp,update_order_snp,tau_set,sigma_set,np.log(10)*logodds_set,alpha_set,mu_set,update_order_set,
+                   tol,maxiter,outer_iter)
 
-def getCausalPathways(pathwayDF, causalGenes):
-  causalPathway=[]
-  for index,row in geneDF.iterrows():
-    pathwayID=row["Pathway"]
-    geneIndx=row["GeneIndex"]
-    pathIndx=index
-    causals=[i for i in geneIndx if i in causalGenes]
-    if len(causals)>0:
-      causalPathway.append(pathIndx)
-  return causalPathway
+  out={}
+  out["logw.snp"] = out["logw.snp"] - np.linalg.det(np.cross(I_snp))
+  out["logw.set"] = out["logw.set"]  - np.linalg.det(np.cross(I_set))
+  
+  out["b_snp"] =np.asarray(SIy_snp - np.matmul(SIX_snp,(alpha.snp*mu.snp)))
+  out["b_set"]=np.asarray(SIy_set - np.matmul(SIX_set,(alpha.set*mu.set)))
+  
+  numiter_snp  = len(out["logw_snp"])
+  out["logw_snp"]= out["logw_snp"][numiter_snp]
+  numiter_set  =len(out["logw_set"])
+  out["logw_set"]= out["logw_set"][numiter_set]
+  return out 
