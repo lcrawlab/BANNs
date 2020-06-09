@@ -1,4 +1,4 @@
-
+import math
 import numpy as np
 
 def softplus(x):
@@ -12,9 +12,11 @@ def relu(x):
 
 def logpexp(x):
   y=x
-  indices = [i for i,v in enumerate(x >= 4) if v]
-  for i in indices:
-    y[i] <- np.log(1 + np.exp(x[i]))
+  indices=np.argwhere(x < 16)
+  #indices = [i for i,v in enumerate(x < 16) if v]
+  for j in indices:
+    for i in j:
+        y[i]= float(np.log(1 + np.exp(x[i])))
   return y
 
 def sigmoid(x):
@@ -45,12 +47,15 @@ def randn(m,n):
   return np.random.normal(0, 1, size=(m, n))
 
 def dot(x,y):
-  return np.sum(x*y)
+  if x.shape!=y.shape:
+    y=np.ones(x.shape)
+  return np.dot(x,y)
 
 def norm2(x):
   return np.sqrt(dot(x,x))
 
 def betavar(p,mu,s):
+  s=np.ones(p.shape)
   return p*(s+(1-p)*(mu**2))
 
 def diagsq(X, a=None):
@@ -66,8 +71,15 @@ def diagsq(X, a=None):
   return y 
 
 def varLoss(Xr, d, y, sigma, alpha, mu, s, sa, logodds):
-  linearLoss=(len(y)/2*np.log(2*pi*sigma) - norm2(y - Xr)^2/(2*sigma)-dot(d,betavar(alpha,mu,s))/(2*sigma))
-  kleffect=((sum(alpha) + dot(alpha,np.log(s/sa)) - dot(alpha,s + mu^2)/sa)/2 -dot(alpha,np.log(alpha+5e-52)) - dot(1 - alpha,log(1 - alpha+5e-52)))
+  pi=math.pi
+  Xr=np.ones(y.shape)
+  loss=linearLoss=(len(y)/2*np.log(2* pi *sigma) -norm2(y - Xr)**2/(2*sigma)-dot(d,betavar(alpha,mu,s))/(2*sigma))
+  kleffect=((sum(alpha) + 
+    dot(alpha,np.log(s/sa)) - 
+    dot(alpha, mu**2)/sa)/2 -
+  dot(alpha,np.log(alpha+5e-52)) - 
+  dot(1 - alpha,np.log(1 - alpha+5e-52)))
+
   loss=linearLoss+kleffect+np.sum((alpha-1)*logodds + logsigmoid(logodds))
   return loss
 

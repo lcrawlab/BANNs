@@ -2,8 +2,48 @@
 import numpy as np
 from utils import *
 
-def innerLoop(X,y,mask,xy,d,tau_snp,sigma_snp,np.log(10)*logodds_snp,alpha_snp,mu_snp,update_order_snp,tau_set,sigma_set,np.log(10)*logodds_set,alpha_set,mu_set,update_order_set,
-                   tol,maxiter,outer_iter):
+def varParamUpdate(X,mask, tau_snp, sigma_snp, logodds_snp, xy, d, alpha0_snp, mu0_snp, Xr0, updates_snp,
+                         tau_set, sigma_set, logodds_set, alpha0_set, mu0_set, Hr0, updates_set):
+  n = X.shape[0]
+  p=X.shape[1]
+  g=mask.shape[1]
+
+  alpha_snp = np.ndarray.flatten(np.asarray(alpha0_snp))
+  mu_snp=np.ndarray.flatten(np.asarray(mu0_snp))
+  Xr = np.ndarray.flatten(np.asarray(Xr0))
+  alpha_set=np.ndarray.flatten(np.asarray(Xr0))
+  mu_set=np.ndarray.flatten(np.asarray(mu0_set))
+  Hr = np.ndarray.flatten(np.asarray(Hr0))
+
+  for i in updates_snp:
+    s_snp = sigma_snp*tau_snp/(sigma_snp*d[i] + 1)
+    r_snp  = alpha_snp[i] * mu_snp[i]
+    mu_snp[i] = s_snp/tau_snp * (xy[i] + d[i]*r_snp - np.sum(X[:,i]*Xr))
+    alpha_snp[i] = sigmoid(logodds_snp[i] + (np.log(s_snp/(sigma_snp*tau_snp)) + mu_snp[i]^2/s_snp)/2)
+    Xr = Xr + (alpha.snp[i]*mu.snp[i] - r.snp) * X[:,i]
+
+  for j in updates_set:
+    bH=np.matmul(rep_col(mu_snp*alpha_snp,p),mask)
+    H= np.matmul(X,bH)
+    Hy = np.ndarray.flatten(np.matmul(y,H))
+    Hd =diagsq(H)
+    s_set =  sigma_set*tau_set/(sigma_set*Hd[j] + 1)
+    r_set = alpha_set[j] * mu_set[j]
+    mu_set[j] =  s_set/tau_set * (Hy[j] + Hd[j]*r_set - np.sum(H[:,j]*Hr))
+    alpha_set[j] = sigmoid(logodds_set[j] + (log(s_set/(sigma_set*tau_set)) + mu_set[j]**2/s_set)/2)
+    Hr = Hr + (alpha_set[j]*mu_set[j] - r_set) * H[:,j]
+
+    res={}
+    res["alpha_snp"] = alpha_snp
+    res["mu_snp"] = mu_snp
+    res["Xr"] = Xr
+    res["alpha_set"] = alpha_set
+    res["mu_set"] = mu_set
+    res["Hr"] = Hr
+    
+    return res 
+
+def innerLoop(X,y,mask,xy,d,tau_snp,sigma_snp,logodds_snp,alpha_snp,mu_snp,update_order_snp,tau_set,sigma_set,logodds_set,alpha_set,mu_set,update_order_set,tol,maxiter,outer_iter):
   n=X.shape[0]
   p=X.shape[1]
   g=mask.shape[1]
@@ -16,7 +56,7 @@ def innerLoop(X,y,mask,xy,d,tau_snp,sigma_snp,np.log(10)*logodds_snp,alpha_snp,m
 
   bH=np.matmul(rep_col(mu_snp * alpha_snp,p),mask)
   H=np.matmul(X, bH)
-  Hr = np.ndarray.flatten(np.matmul(H, alpha_set*mu_set))
+  Hr =H
   Hd=diagsq(H)
   s_set = sigma_set*tau_set/(sigma_set*Hd+1)
   err_set=np.repeat(0,maxiter)
@@ -25,7 +65,7 @@ def innerLoop(X,y,mask,xy,d,tau_snp,sigma_snp,np.log(10)*logodds_snp,alpha_snp,m
   logw_snp=np.repeat(0,maxiter)
   logw_set=np.repeat(0, maxiter)
 
-  for i in range(0,maxiter):
+  for i in range(0,int(maxiter)):
     alpha0_snp = alpha_snp
     mu0_snp = mu_snp
     s0_snp=s_snp
@@ -104,6 +144,18 @@ def innerLoop(X,y,mask,xy,d,tau_snp,sigma_snp,np.log(10)*logodds_snp,alpha_snp,m
 
     return res
 
+  # def estimatePVE(model, X, nr = 1000):
+  #   p  = X.shape[1]
+  #   numModels=len(model["logw"])
+  #   pve=np.repeat(0,nr)
+    
+  #   for i in range(0,nr):
+  #     j=np.random.choice(numModels,1,p=model["w"])
+  #     b=
+
+    
+  # return(mean(pve))
+
 def outerloop(X, I_snp, y,mask, xy,d,SIy_snp,SIX_snp,I_set,SIy_set,SIX_set,tau_snp,sigma_snp,logodds_snp,alpha_snp,mu_snp,update_order_snp,
         tau_set,sigma_set,logodds_set,alpha_set,mu_set,update_order_set,tol,maxiter,outer_iter):
   p=X.shape[1]
@@ -114,8 +166,7 @@ def outerloop(X, I_snp, y,mask, xy,d,SIy_snp,SIX_snp,I_set,SIy_set,SIX_set,tau_s
   if(len(logodds_set)==1):
     logodds_set=np.repeat(logodds_set,g)
   
-  res=innerLoop(X,y,mask,xy,d,tau_snp,sigma_snp,np.log(10)*logodds_snp,alpha_snp,mu_snp,update_order_snp,tau_set,sigma_set,np.log(10)*logodds_set,alpha_set,mu_set,update_order_set,
-                   tol,maxiter,outer_iter)
+  res=innerLoop(X,y,mask,xy,d,tau_snp,sigma_snp,np.log(10)*logodds_snp,alpha_snp,mu_snp,update_order_snp,tau_set,sigma_set,np.log(10)*logodds_set,alpha_set,mu_set,update_order_set,tol,maxiter,outer_iter)
 
   res["logw.snp"] = res["logw.snp"] - np.linalg.det(np.cross(I_snp))
   res["logw.set"] = res["logw.set"]  - np.linalg.det(np.cross(I_set))
