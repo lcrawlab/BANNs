@@ -2,7 +2,7 @@
 import numpy as np
 from utils import *
 
-def varParamUpdate(X,mask, tau_snp, sigma_snp, logodds_snp, xy, d, alpha0_snp, mu0_snp, Xr0, updates_snp,
+def varParamUpdate(X,mask,y, tau_snp, sigma_snp, logodds_snp, xy, d, alpha0_snp, mu0_snp, Xr0, updates_snp,
                          tau_set, sigma_set, logodds_set, alpha0_set, mu0_set, Hr0, updates_set):
   n = X.shape[0]
   p=X.shape[1]
@@ -19,8 +19,8 @@ def varParamUpdate(X,mask, tau_snp, sigma_snp, logodds_snp, xy, d, alpha0_snp, m
     s_snp = sigma_snp*tau_snp/(sigma_snp*d[i] + 1)
     r_snp  = alpha_snp[i] * mu_snp[i]
     mu_snp[i] = s_snp/tau_snp * (xy[i] + d[i]*r_snp - np.sum(X[:,i]*Xr))
-    alpha_snp[i] = sigmoid(logodds_snp[i] + (np.log(s_snp/(sigma_snp*tau_snp)) + mu_snp[i]^2/s_snp)/2)
-    Xr = Xr + (alpha.snp[i]*mu.snp[i] - r.snp) * X[:,i]
+    alpha_snp[i] = sigmoid(logodds_snp[i] + (np.log(s_snp/(sigma_snp*tau_snp)) + mu_snp[i]**2/s_snp)/2)
+    Xr = Xr + (alpha_snp[i]*mu_snp[i] - r_snp) * X[:,i]
 
   for j in updates_set:
     bH=np.matmul(rep_col(mu_snp*alpha_snp,p),mask)
@@ -81,7 +81,7 @@ def innerLoop(X,y,mask,xy,d,tau_snp,sigma_snp,logodds_snp,alpha_snp,mu_snp,updat
     logw0_snp = varLoss(Xr,d,y,tau_snp,alpha_snp,mu_snp,s_snp,tau_snp*sigma_snp, logodds_snp)
     logw0_set = varLoss(Hr,Hd,y,tau_set,alpha_set,mu_set,s_set,tau_set*sigma_set, logodds_set)
 
-    res   = varParamUpdate(X,mask, tau_snp, sigma_snp, logodds_snp, xy, d, alpha_snp, mu_snp, Xr, update_order_snp,
+    res   = varParamUpdate(X,mask,y,tau_snp, sigma_snp, logodds_snp, xy, d, alpha_snp, mu_snp, Xr, update_order_snp,
                             tau_set, sigma_set, logodds_set, alpha_set, mu_set, Hr, update_order_set) 
     
     alpha_snp = res["alpha_snp"]

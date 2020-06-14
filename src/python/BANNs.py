@@ -2,7 +2,6 @@ from utils import *
 from customModel import *
 import time
 
-
 def BANN(X,y,mask, centered=False, numModels=20, tol=1e-4, maxiter=1e4):
 	X=np.asarray(X)
 	y=np.asarray(y)
@@ -50,7 +49,7 @@ def BANN(X,y,mask, centered=False, numModels=20, tol=1e-4, maxiter=1e4):
 	I_set=np.ones((n,1))
 	SIy_set = np.ones((1,1)) #np.linalg.solve(n,np.matmul(y,I_set))
 	SIX_set =np.ones((1,g)) #np.linalg.solve(p,np.matmul(I_set,X))
-	time.sleep(14400)
+	time.sleep(2)
 	for i in range(0,numModels):
 		out=outerloop(X, I_snp, y, mask, xy, d, SIy_snp, SIX_snp, I_set, SIy_set, SIX_set, tau_snp[i],sigma_snp[i],logodds_snp[:,i],alpha_snp[:,i],mu_snp[:,i],update_order_snp,tau_set[i],sigma_set[i],logodds_set[:,i],alpha_set[:,i],mu_set[:,i],update_order_set,tol,maxiter,i)
 

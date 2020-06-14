@@ -61,13 +61,18 @@ def betavar(p,mu,s):
 def diagsq(X, a=None):
   m=X.shape[0]
   n=X.shape[1]
+  print(m,n)
   if a==None:
     a=np.repeat(1,m)
   y=np.repeat(0,n)
+
+  for j in range(0,n):
+    print(y[j])
   for j in range(0,n):
     for i in range(0,m):
       t=X[i,j]
-      y[j]=y[j]+(t*t*a[i])
+      y[j]+=t*t*a[i]
+  print(y)
   return y 
 
 def varLoss(Xr, d, y, sigma, alpha, mu, s, sa, logodds):
