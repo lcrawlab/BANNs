@@ -1,0 +1,9 @@
+---
+title: "Example showing how to run BANNs"
+author: "Pinar Demetci @ Crawford Lab"
+date: "`r Sys.Date()
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    vignette:
+---
