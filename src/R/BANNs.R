@@ -10,11 +10,11 @@ registerDoParallel(cores=cores)
 
 ####### Read in data #########
 
-X=as.matrix(read.csv("filepath", header=FALSE))
-y=as.numeric(unlist(read.csv("filepath", header=FALSE)))
-mask=as.matrix(read.csv("filepath", header=FALSE))
-path_to_utils="filepath/utils.R"
-outputfile="filepath"
+# X=as.matrix(read.csv("/Users/pinardemetci/Desktop/X_TOY.csv", header=FALSE))
+# y=as.numeric(unlist(read.csv("/Users/pinardemetci/Desktop/y_TOY.csv", header=FALSE)))
+# mask=as.matrix(read.csv("/Users/pinardemetci/Desktop/mask_TOY.csv", header=FALSE))
+# path_to_utils="/Users/pinardemetci/Desktop/utils.R"
+# outputfile="filepath"
 source(path_to_utils) 
 
 varParamUpdate<-function(X,mask, tau.snp, sigma.snp, logodds.snp, xy, d, alpha0.snp, mu0.snp, Xr0, updates.snp,
@@ -174,6 +174,7 @@ estimatePVE <- function (fit, X, nr = 1000) {
   
   return(mean(pve))
 }
+
 outerloop <-function(X, I.snp, y,mask, xy,d,SIy.snp,SIX.snp,I.set,SIy.set,SIX.set,tau.snp,sigma.snp,logodds.snp,alpha.snp,mu.snp,update.order.snp,tau.set,sigma.set,logodds.set,alpha.set,mu.set,update.order.set,tol,maxiter,outer.iter){
   p<-ncol(X)
   g<-ncol(SIX.set)
@@ -187,7 +188,10 @@ outerloop <-function(X, I.snp, y,mask, xy,d,SIy.snp,SIX.snp,I.set,SIy.set,SIX.se
                    tol,maxiter,outer.iter)
   
   out$logw.snp <- out$logw.snp - determinant(crossprod(I.snp),logarithm = TRUE)$modulus/2
+  print(determinant(crossprod(I.snp),logarithm = TRUE)$modulus/2)
+  
   out$logw.set <- out$logw.set - determinant(crossprod(I.set),logarithm = TRUE)$modulus/2
+  print(determinant(crossprod(I.snp),logarithm = TRUE)$modulus/2)
   
   out$b.snp <- c(with(out,SIy.snp - SIX.snp %*% (alpha.snp*mu.snp)))
   out$b.set <- c(with(out,SIy.set - SIX.set %*% (alpha.set*mu.set)))

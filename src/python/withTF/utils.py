@@ -1,7 +1,12 @@
 import numpy as np
 import pandas as pd
+import math
 from annotation import *
 from customModel import *
+
+def betavar(p,mu,s):
+  s=np.ones(p.shape)
+  return p*(s+(1-p)*(mu**2))
 
 def getGeneMask(geneAnnotationDF,N,p):
 	mask=np.zeros(shape=[N,p])
@@ -40,6 +45,16 @@ def computePVE_Genes(bnn):
   numerator= pip_logits*gene_betas
   denominator=numerator+gene_bias
   return(numerator/denominator)
+
+def modelLoss(Xr, d, y, sigma, prob, mu, s, sa, logodds):
+  pi=math.pi
+  Xr=np.ones(y.shape)
+  linearLoss=(-len(y)/2*np.log(2* pi *sigma) -np.linalg.norm(y - Xr)**2/(2*sigma)-np.dot(d,betavar(prob,mu,s))/(2*sigma))
+  kleffect=((np.sum(prob) + 
+  np.dot(prob,np.log(s/sa)) - 
+  np.dot(prob, mu**2)/sa)/2 -
+  np.dot(prob,np.log(prob)) - 
+  np.dot(1 - prob,np.log(1 - prob)))
 
 
 ##################################################################################################################################

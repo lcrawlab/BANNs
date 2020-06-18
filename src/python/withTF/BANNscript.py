@@ -52,13 +52,7 @@ print("y shape", y.shape)
 geneMask = np.load("mask.npy")
 
 
-###########################
-##  Set hyperparameters  ##
-###########################
-n_epochs = 500 #Set to 500-1000 for whole chromosomes
-batch_size = 1000 #Can be set to 1000-5000 for whole chromosomes
-learning_rate=0.1 #learning rate is best 1e-3 when using whole chromosome. Have not tried for whole genome. 
-# The model is pretty sensitive to learningRate/n_epochs balance. 
+ The model is pretty sensitive to learningRate/n_epochs balance. 
 # The higher the number of parameters, the lower the learning rate needs to be and as a consequence, the higher the n_epochs need to be.
 # batch_size is not as important but affects variance of the loss. 
 
@@ -69,7 +63,7 @@ ngenes=geneMask.shape[1]  #or len(annotationDF), The number of genes can be retr
 p1 = ngenes #This will always be the number of genes
 p2 =1 #This will always be 1 for quantitative models
 layers=buildModel(p1,p2,geneMask,activation_fn="relu")
-bnn = BANN_Quantitative(layers, l_rate=learning_rate) # Create and train network
+bnn = BANN_Quantitative(layers, l_rate=0.1) # Create and train network
 
 
 ###########################
@@ -77,8 +71,8 @@ bnn = BANN_Quantitative(layers, l_rate=learning_rate) # Create and train network
 ###########################
 
 # Based on the loss plot, if you think we are overfitting, you can decrease the patience parameter 
-earlystopper = EarlyStopping(monitor='val_loss', patience=50, verbose=1)
-fit_history = bnn.fit(X,y, batch_size=batch_size, epochs=n_epochs,
+earlystopper = EarlyStopping(monitor='val_loss', verbose=1)
+fit_history = bnn.fit(X,y, batch_size=500, epochs=100000,
                         validation_split=0.2,
                         callbacks=[earlystopper],
                         verbose=1) #verbose can be set to 0 if we don't want 

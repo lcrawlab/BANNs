@@ -13,7 +13,7 @@ class BANN_Quantitative:
 	
 		def elbo(y_true, y_pred):
 			return tf.losses.mean_squared_error(y_true, y_pred) + sum(self.model.losses)/K.cast(K.shape(y_true)[0], "float32")
-		self.model.compile(loss=elbo, optimizer=tf.keras.optimizers.Adam(self.l_rate), metrics=["mse"])
+		self.model.compile(loss=modelLoss, optimizer=tf.keras.optimizers.Adam(self.l_rate), metrics=["mse"])
 
 	def build_model(self, layers, check_shapes=True):
 		model = tf.keras.Sequential()
