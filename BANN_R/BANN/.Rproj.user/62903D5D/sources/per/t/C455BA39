@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1592767522765.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2359004531",
+    "id" : "C455BA39",
+    "lastKnownWriteTime" : 1592767704,
+    "last_content_update" : 1592767704856,
+    "path" : "~/Downloads/BANNs_code/BANN/BANN/R/outerloop.R",
+    "project_path" : "R/outerloop.R",
+    "properties" : {
+        "cursorPosition" : "2,44",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

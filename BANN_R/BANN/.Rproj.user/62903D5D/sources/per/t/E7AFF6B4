@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1592767087286.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1530508320",
+    "id" : "E7AFF6B4",
+    "lastKnownWriteTime" : 1592767674,
+    "last_content_update" : 1592767674175,
+    "path" : "~/Downloads/BANNs_code/BANN/BANN/R/estimatePVE.R",
+    "project_path" : "R/estimatePVE.R",
+    "properties" : {
+        "cursorPosition" : "2,38",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

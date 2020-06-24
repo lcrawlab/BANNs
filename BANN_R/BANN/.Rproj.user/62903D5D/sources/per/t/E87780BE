@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1592766889635.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "775341933",
+    "id" : "E87780BE",
+    "lastKnownWriteTime" : 1593009584,
+    "last_content_update" : 1593009584211,
+    "path" : "~/Downloads/BANNs_code/BANN/BANN/R/BANN.R",
+    "project_path" : "R/BANN.R",
+    "properties" : {
+        "cursorPosition" : "8,12",
+        "scrollLine" : "5"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

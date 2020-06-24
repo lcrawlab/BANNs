@@ -1,0 +1,3 @@
+Dependencies: python > 3.6, numpy > 1.17.3
+
+For usage: Please check BANN_example.py to see how to run BANN on the toy example we provided in the example_data directory.

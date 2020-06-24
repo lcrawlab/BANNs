@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1592767312784.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3720305762",
+    "id" : "643FE402",
+    "lastKnownWriteTime" : 1593009492,
+    "last_content_update" : 1593009492357,
+    "path" : "~/Downloads/BANNs_code/BANN/BANN/R/innerloop.R",
+    "project_path" : "R/innerloop.R",
+    "properties" : {
+        "cursorPosition" : "46,5",
+        "scrollLine" : "39"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
