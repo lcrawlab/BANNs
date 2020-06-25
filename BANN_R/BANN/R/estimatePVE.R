@@ -1,6 +1,6 @@
 #' BANN function for estimating proportiona of variance explained (PVE).
 #' @fit stores the results for all the parameters of the neural network.
-#' @X is the input matrix with n by p.
+#' @X is the input matrix with dimensionality n by p.
 #' @nr stores the number of iterations.
 #' @example
 #' pve = estimatePVE(fit, X)

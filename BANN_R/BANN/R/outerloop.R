@@ -1,8 +1,8 @@
 #' BANN function for outer loop of all models to update free parameters and variance parameters.
-#' @X is the genotype matrix with n by p.
+#' @X is the genotype matrix with dimensionality n-by-p.
 #' @y is the phenotype vector with length n.
 #' @tau, sigma are variance parameters.
-#' @logodds is the weight for fixed hyper-param.
+#' @logodds is the weight for fixed hyper-parameters.
 #' @xy, @d, @I, @SIy, @SIX are precomputed helper statistics.
 #' @alpha0, @mu0 are free parameters.
 #' @update.order is the feature update order.
@@ -14,14 +14,14 @@
 outerloop <- function(X, I, y, xy, d, SIy, SIX, tau,
                       sigma, logodds, alpha, mu, update.order, tol, maxiter,
                       outer.iter){
-  #number of feature
+  #Number of features
   p <- ncol(X)
   if (length(logodds) == 1)
     logodds <- rep(logodds,p)
-  #call inner loop for updating parameters
+  #Call inner loop for updating parameters
   out <- innerloop(X,y,xy,d,tau,sigma,log(10)*logodds,alpha,mu,update.order,
                    tol,maxiter,outer.iter)
-  #subtract the intercept and summarize results
+  #Subtract off the effect of the intercept and summarize results
   out$logw <- out$logw - determinant(crossprod(I),logarithm = TRUE)$modulus/2
   out$b <- c(with(out,SIy - SIX %*% (alpha*mu)))
   numiter  <- length(out$logw)

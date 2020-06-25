@@ -1,10 +1,10 @@
 #' BANN function for free parameters and variance parameters updates.
-#' @X is the input matrix with n by p.
-#' @y is the phenotype vector with length n.
-#' @centered is used to check whether the X is normalized.
+#' @X is the input matrix of dimension n-by-p where n is the number of samples and p is the number of input variables (e.g., SNPs).
+#' @y is the phenotype vector of length n.
+#' @centered is used to check whether the X matrix is normalized.
 #' @tol is the tolerance for checking convergence.
 #' @maxiter is the maximum iteration for updating parameters.
-#' @show_progress is the indicator for whether printing out the progress.
+#' @show_progress is the indicator for whether the software should print out the progress of the model fitting.
 #' @example
 #' SNP_res = BANNvarEM(X, y)
 BANNvarEM<-function(X, y, centered=FALSE, numModels=20, tol = 1e-4,maxiter = 1e4, show_progress = TRUE){
@@ -13,13 +13,13 @@ BANNvarEM<-function(X, y, centered=FALSE, numModels=20, tol = 1e-4,maxiter = 1e4
     X <- scale(X,center = TRUE,scale = TRUE)
     y <- (y - mean(y))/sd(y)
   }
-  #num of inds and features
+  #Number of inds and features
   n=nrow(X)
   p=ncol(X)
-  #precomputed statistics
+  #Precomputed statistics
   xy <- c(y %*%X)
   d  <- diagsq(X)
-  # Initialize latent variables:
+  #Initialize latent variables
   tau=rep(var(y),numModels)
   sigma=rep(1,numModels)
   logodds=t(matrix(seq(-log10(p), -1, length.out=numModels)))
@@ -28,17 +28,17 @@ BANNvarEM<-function(X, y, centered=FALSE, numModels=20, tol = 1e-4,maxiter = 1e4
   mu=randn(p, numModels)
   update.order= 1:p
 
-  #start storage for the optimization params:
+  #Start storage for the optimization parameters:
   logw   <- rep(0, numModels)
   s      <- matrix(0,p,numModels)
   b <- matrix(0,1,numModels)
 
-  ### For intercept, b:
+  #For intercept (or bias terms), b:
   I=matrix(1,n,1)
   SIy <- as.vector(solve(n,c(y) %*% I))
   SIX <- as.matrix(solve(n,t(I) %*% X))
 
-  #Finding the best initialization of hyperparameters
+  #Find the best initialization of hyperparameters
   for (i in 1:numModels) {
     if(show_progress == TRUE){
       print(paste("Initialize model ", i, "/", numModels, sep=""))
@@ -62,7 +62,7 @@ BANNvarEM<-function(X, y, centered=FALSE, numModels=20, tol = 1e-4,maxiter = 1e4
   tau <- rep(tau[i],numModels)
   sigma <- rep(sigma[i],numModels)
 
-  #Computing marginal likelihood
+  #Compute the marginal likelihood
   for (i in 1:numModels) {
     if(show_progress == TRUE){
       print(paste("Updating model ", i, "/", numModels, sep=""))
@@ -87,7 +87,7 @@ BANNvarEM<-function(X, y, centered=FALSE, numModels=20, tol = 1e-4,maxiter = 1e4
               logw = logw, w = w, tau = tau, sigma = sigma, logodds = logodds,alpha = alpha,
               mu = mu,s = s,pip = pip,beta = beta, beta.cov = beta.cov,y = y)
   class(fit) <- c("BANNvarEM","list")
-  #estimate pve
+  #Estimate the PVE
   fit$model.pve <- estimatePVE(fit,X)
   fit$pve           <- matrix(0,p,numModels)
   rownames(fit$pve) <- colnames(X)

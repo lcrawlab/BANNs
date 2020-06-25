@@ -1,5 +1,5 @@
 #' BANN function for inner loop within each one model to update free parameters and variance parameters.
-#' @X is the genotype matrix with n by p.
+#' @X is the genotype matrix with dimensionality n by p.
 #' @y is the phenotype vector with length n.
 #' @tau, @sigma are variance parameters.
 #' @logodds is the weight for fixed hyper-paran.
@@ -16,25 +16,25 @@ innerloop <-function (X, y,xy,d, tau, sigma, logodds, alpha, mu, update.order,
                       outer.iter = NULL){
   n<-nrow(X)
   p<-ncol(X)
-  #precomputed statistics
+  #Precomputed statistics
   Xr <- c(X %*% (alpha*mu))
-  #free parameter: variance for individual feature
+  #Free parameter: variance for individual features
   s <- sigma*tau/(sigma*d + 1)
   logw <- rep(0,maxiter)
   err  <- rep(0,maxiter)
   sigma0 = 1
   n0 = 10
-  #loop until converge
+  #Loop until converge
   for (iter in 1:maxiter) {
 
-    # Save the current variational and model parameters.
+    #Save the current variational and model parameters.
     alpha0 <- alpha
     mu0    <- mu
     s0     <- s
     tau0 <- tau
     sigma.old <- sigma
 
-    #current variational lowerbound
+    #Current variational lowerbound
     logw0 <- varLoss(Xr,d,y,tau,alpha,mu,s,tau*sigma, logodds)
     out   <- varParamUpdate(X,tau,sigma,logodds,xy,d,alpha,mu,Xr,update.order)
     alpha <- out$alpha
@@ -42,18 +42,18 @@ innerloop <-function (X, y,xy,d, tau, sigma, logodds, alpha, mu, update.order,
     Xr    <- out$Xr
     rm(out)
 
-    #variational lowerbound after updates
+    #Variational lowerbound after updates
     logw[iter] <- varLoss(Xr,d,y,tau,alpha,mu,s,tau*sigma, logodds)
     #print(paste("LB:",logw[iter]))
 
-    #update variance paraemters
+    #Update variance paraemters
     tau <- (norm2(y - Xr)^2 + dot(d,betavar(alpha,mu,s)) +
               dot(alpha,(s + mu^2)/sigma))/(n + sum(alpha))
     s     <- sigma*tau/(sigma*d + 1)
     sigma <- (sigma0*n0 + dot(alpha,s + mu^2))/(n0 + tau*sum(alpha))
     s  <- sigma*tau/(sigma*d + 1)
 
-    # check convergence with posterior mean (if change is smaller than the tolerance) or lower bound (if start decreasing after first update)
+    # Check the convergence with posterior mean (stop if change is smaller than the tolerance) or the lower bound (stop if start decreasing after first update)
     err[iter] <- max(abs(alpha - alpha0))
     if (logw[iter] < logw0  & iter > 2) {
       logw[iter] <- logw0
@@ -69,7 +69,7 @@ innerloop <-function (X, y,xy,d, tau, sigma, logodds, alpha, mu, update.order,
       break
     }
   }
-  # return results
+  #Return results
   return(list(logw = logw[1:iter],err = err[1:iter],tau = tau,sigma = sigma,
               alpha = alpha,mu = mu,s = s))
 }
