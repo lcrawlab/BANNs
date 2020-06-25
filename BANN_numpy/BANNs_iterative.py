@@ -91,13 +91,13 @@ def BANNvarEM(X, y, centered=False, numModels=20, tol=1e-4, maxiter=1e4, show_pr
 
 def BANN(X, mask, y, centered=False, numModels=20, tol=1e-4, maxiter=1e4, show_progress = True):
 	'''
-	X is the genotype matrix with n by p
-	mask is the annotation file with p by g
-	y is the phenotype with dimension of n
+	X is the genotype matrix with dimension n-by-p
+	mask is the annotation file with dimension p-by-g
+	y is the phenotype with dimension n
 	numModels is the number of initialized models for computing LB 
 	tol is the convergence tolerance
 	maxiter is the maximum iterations
-	show_progress is the indicator for whether printing out the progress
+	show_progress is the indicator for printing out the progress
 	'''
 	### number of SNPs
 	p = X.shape[1]
