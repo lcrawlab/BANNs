@@ -1,3 +1,12 @@
+#' This program is free software: you can redistribute it under the
+#' terms of the GNU General Public License; either version 3 of the
+#' License, or (at your option) any later version.
+#'
+#' This program is distributed in the hope that it will be useful, but
+#' WITHOUT ANY WARRANY; without even the implied warranty of
+#' MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#' General Public License for more details.
+#'
 #' BANN function for free parameters and variance parameters updates.
 #' @X is the input matrix of dimension n-by-p where n is the number of samples and p is the number of input variables (e.g., SNPs).
 #' @y is the phenotype vector of length n.
@@ -16,9 +25,12 @@ BANNvarEM<-function(X, y, centered=FALSE, numModels=20, tol = 1e-4,maxiter = 1e4
   #Number of inds and features
   n=nrow(X)
   p=ncol(X)
+  K=3
+
   #Precomputed statistics
   xy <- c(y %*%X)
   d  <- diagsq(X)
+
   #Initialize latent variables
   tau=rep(var(y),numModels)
   sigma=rep(1,numModels)

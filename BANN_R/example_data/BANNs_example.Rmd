@@ -1,0 +1,50 @@
+---
+title: "BANNs_example"
+output: html_document
+---
+
+## BANNs example with R
+
+To install R version of BANN, navigate to the directory that contains BANN_0.1.0.tar.gz file and run ``R CMD INSTALL BANN_0.1.0.tar.gz'' from your command line, then you can use BANN as an R library.
+The R version of BANNs carries out SNP-level and SNPset-level optimization via variational EM updates. It requires three inputs: (1) a numerical genotype matrix with no missing values, X,  (2) a numerical vector with no missing values, y, which correspond to phenotypes, and (3) a genomic annotation "mask" matrix, which guides the sparsity of connections between SNPs and SNP-sets. In this matrix, rows correspond to SNPs and columns correspond to SNPsets. It should only contain 0s and 1s, 1 indicating a SNP being annotated in a SNP-set.
+
+```{r setup, include=FALSE}
+rm(list = ls())
+library(foreach)
+library(doParallel)
+library(BANN)
+```
+
+
+To show an example, we will simulate a genotype matrix:
+
+```{r simuGenotype}
+N<-500
+p<-1000
+maf<-0.5+0.45*runif(p,0.0,1.0)
+X<-matrix(((runif(N*p, 0.0,1.0)>maf)&(runif(N*p, 0.0,1.0)>maf))*1.0, nrow=500, ncol=1000)
+
+# Normalizing the genotype matrix:
+Xmean<-apply(X, 2, mean)
+Xsd<-apply(X, 2, sd)
+X<-((X-Xmean)/Xsd)
+```
+
+And then pick the first 10 SNPs to be causal and simulate phenotype based on these:
+
+```{r simuGenotype}
+# Defining the parameters of the phenotype simulations:
+
+H2<-0.6
+rho<-1
+causal_indices<-1:10
+ncausal<-length(causal_indices)
+
+# Simulating additive effects:
+Xadditive<-X[,causal_indices]
+betaAdd<-
+
+
+
+
+```
