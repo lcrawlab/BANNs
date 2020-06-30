@@ -29,10 +29,8 @@ BANN <-function(X, mask, y, centered=FALSE, numModels=20, tol = 1e-4,maxiter = 1
   N=nrow(X)
   p=ncol(X)
   g=ncol(mask)
-
   #first run SNP layer
   SNP_res=BANNvarEM(X, y, centered=centered, numModels=numModels, tol = tol,maxiter = maxiter, show_progress = show_progress)
-
   #derive posterior mean estimator for weights
   w<-rep.row(SNP_res$w, p)
   b<-rep.col(rowSums(w*SNP_res$mu*SNP_res$alpha),g)*mask
