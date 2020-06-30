@@ -17,7 +17,6 @@ The BANN framework simply requires individual-level genotype/phenotype data and 
 * `X`: Genotype matrix of size N by P where N is the number of individuals and P is the number of SNPs.
 * `y`: Phenotype file of N rows where N is the number of individuals and each row stores the continuous phenotype value. 
 * `mask`: Mask matrix of size P by G where P is the number of SNPs and G is the number of SNP sets (genes). Each column is a vector filled with 0s and 1s with 1 indicates the appearance of the corresponding SNP of that row within the gene of that column and vice versa.  
-
 ![alt text](misc/Fig1.pdf)
 
 # TUTORIAL
