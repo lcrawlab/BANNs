@@ -29,6 +29,7 @@ The method can also take in **_summary statistics_** where SNP-level effect size
 Structurally, sequential layers of the BANN model represent different scales of genomic units:
 * The first layer of the network takes SNPs as inputs, with each unit corresponding to information about a single SNP.
 * The second layer of the network represents SNP-sets.
+
 The interpretation of the second point naturally arises from the fact that all SNPs that have been annotated for the same SNP-set are connected to the same neuron in the second layer.
 
 ## Probabilistic Details about the BANN Framework
@@ -36,13 +37,15 @@ The interpretation of the second point naturally arises from the fact that all S
 We frame the BANN methodology as a Bayesian nonlinear mixed model with which we can perform classic variable selection. Some unique aspects about the model include:
 * We leverage the fact that using nonlinear activation functions for the neurons in the hidden layer implicitly account for both additive and non-additive effects between SNPs within a given SNP-set 
 * The weights and connections of the neural network as random variables with sparse prior distributions that reflect how genetic effects are manifested at different genomic scales.
-* We use a variational expectation-maximization (EM) algorithm to infer posterior inclusion probabilities (PIPs) for SNPs and SNP-sets. This algorithm is very similar to that proposed by [Cabronetto and Stephens (2012)](https://projecteuclid.org/euclid.ba/1339616726)
+* We use a variational expectation-maximization (EM) algorithm to infer posterior inclusion probabilities (PIPs) for SNPs and SNP-sets. This algorithm is very similar to that proposed by [Cabronetto and Stephens (2012)](https://projecteuclid.org/euclid.ba/1339616726).
+
 Details and statistical derivations of the BANN framework can be found in Methods and Supplementary Notes of the citation below.
 
 ## Other Notes on the Software
+
 * Please make sure that the order of individuals (rows) in the genotype matrix `X` matches the order of individuals in the phenotype file `y`.
 * Please make sure that the SNP order (i.e., the columns) of genotype matrix `X` is the same as order in the mask file (i.e., the rows). 
-We report the results according to the order of these input files. For example, the PIPs for SNP-set will be returned in the same way that they were ordered in the mak file (i.e., along the columns). 
+* We report the results according to the order of these input files. For example, the PIPs for SNP-set will be returned in the same way that they were ordered in the mak file (i.e., along the columns). 
 
 ## RELEVANT CITATIONS
 
