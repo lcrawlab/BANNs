@@ -49,7 +49,7 @@ We report the results according to the order of these input files. For example, 
 P. Demetci*, W. Cheng*, G. Darnell, X. Zhou, S. Ramachandran, and L. Crawford. Multi-scale Genomic Inference using Biologically Annotated Neural Networks. _biorxiv_.
 
 ## QUESTIONS AND FEEDBACK
-For questions or concerns with BANNs, please contact [Pinar Demetci](mailto:pinar_demetci@brown.edu), [Wei Cheng](mailto:wei_cheng1@brown.edu), [Lorin Crawford](mailto:lorin_crawford@brown.edu).
+For questions or concerns with BANN software, please contact [Pinar Demetci](mailto:pinar_demetci@brown.edu), [Wei Cheng](mailto:wei_cheng1@brown.edu), or [Lorin Crawford](mailto:lorin_crawford@brown.edu).
 
 We welcome and appreciate any feedback you may have with our software and/or instructions.
 
