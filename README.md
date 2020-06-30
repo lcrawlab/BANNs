@@ -12,15 +12,28 @@
 
 ## Background 
 
-The BANN framework simply requires individual-level genotype/phenotype data and a predefined list of SNP-set annotations (see schematic below). 
+The BANN framework simply requires individual-level genotype/phenotype data and a predefined list of SNP-set annotations (see first schematic below). This translates to the following inputs for the software:
+* `X`: Genotype matrix of size N-by-P, where N is the number of individuals and P is the number of SNPs.
+* `y`: Phenotype file of N rows, where N is the number of individuals and each row stores the continuous phenotypic value. 
+* `mask`: Mask matrix of size P-by-G, where P is the number of SNPs and G is the number of SNP-sets (e.g., genes). Each column is a vector filled with 0s and 1s, where 1 indicates that the given SNP in that row belongs to the gene in that column.  
 
-* `X`: Genotype matrix of size N by P where N is the number of individuals and P is the number of SNPs.
-* `y`: Phenotype file of N rows where N is the number of individuals and each row stores the continuous phenotype value. 
-* `mask`: Mask matrix of size P by G where P is the number of SNPs and G is the number of SNP sets (genes). Each column is a vector filled with 0s and 1s with 1 indicates the appearance of the corresponding SNP of that row within the gene of that column and vice versa.  
 ![alt text](misc/Fig1.png)
 
-# TUTORIAL
-For each version, we provide an example code and a toy example data in the corresponding subdirectory to illustrate how to use BANNs. Please check accordingly.
+The method can also take in summary statistics where SNP-level effect size estimates are treated as the phenotype and an estimate of the linkage disequilibrium (LD) matrix is used as input data. This translates to the alternative inputs for the software:
+* `X`: LD matrix of size P-by-P, where P is the number SNPs.
+* `y`: SNP-level effect sizes for each of the P SNPs, often derived by using a single-SNP GWAS method (e.g., ordinary least squares). 
+* `mask`: Mask matrix of size P-by-G, where P is the number of SNPs and G is the number of SNP-sets (e.g., genes). Each column is a vector filled with 0s and 1s, where 1 indicates that the given SNP in that row belongs to the gene in that column. 
+
+![alt text](misc/Supp_Fig1.png)
+
+Structurally, sequential layers of the BANN model represent different scales of genomic units:
+* The first layer of the network takes SNPs as inputs, with each unit corresponding to information about a single SNP.
+* The second layer of the network represents SNP-sets.
+All SNPs that have been annotated for the same SNP-set are then connected to the same neuron in the second layer
+
+## Probabilistic Details about the Framework
+
+We frame the BANN methodology as a Bayesian nonlinear mixed model with which we can perform classic variable selection. 
 
 # NOTES
 * Please make sure that the individual order (rows) of the genotype matrix X is the same with phenotype file y.
