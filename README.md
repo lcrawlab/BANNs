@@ -12,14 +12,14 @@
 
 ## Background 
 
-The BANN framework simply requires individual-level genotype/phenotype data and a predefined list of SNP-set annotations (see first schematic below). This translates to the following inputs for the software:
+The BANN framework simply requires **_individual-level_** genotype/phenotype data and a predefined list of SNP-set annotations (see first schematic below). This translates to the following inputs for the software:
 * `X`: Genotype matrix of size N-by-P, where N is the number of individuals and P is the number of SNPs.
 * `y`: Phenotype file of N rows, where N is the number of individuals and each row stores the continuous phenotypic value. 
 * `mask`: Mask matrix of size P-by-G, where P is the number of SNPs and G is the number of SNP-sets (e.g., genes). Each column is a vector filled with 0s and 1s, where 1 indicates that the given SNP in that row belongs to the gene in that column.  
 
 ![alt text](misc/Fig1.png)
 
-The method can also take in summary statistics where SNP-level effect size estimates are treated as the phenotype and an estimate of the linkage disequilibrium (LD) matrix is used as input data. This translates to the alternative inputs for the software:
+The method can also take in **_summary statistics_** where SNP-level effect size estimates are treated as the phenotype and an estimate of the linkage disequilibrium (LD) matrix is used as input data. This translates to the alternative inputs for the software:
 * `X`: LD matrix of size P-by-P, where P is the number SNPs.
 * `y`: SNP-level effect sizes for each of the P SNPs, often derived by using a single-SNP GWAS method (e.g., ordinary least squares). 
 * `mask`: Mask matrix of size P-by-G, where P is the number of SNPs and G is the number of SNP-sets (e.g., genes). Each column is a vector filled with 0s and 1s, where 1 indicates that the given SNP in that row belongs to the gene in that column. 
