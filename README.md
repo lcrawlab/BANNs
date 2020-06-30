@@ -1,11 +1,14 @@
-# BANN
-Multi-scale Genomic Inference using Biologically Annotated Neural Networks with Variational Expectation-Maximization Algorithm.
- 
-# DEPENDENCIES
-We implement BANNs using Tensorflow, numpy and R. For each version, please check the dependencies requirements in each subdirectory. 
+# Biologically Annoted Nerual Networks (BANNs)
 
-# INSTALLATION
-For each version, please check the installation instructions in each subdirectory.
+**BANNs** are a class of feedforward Bayesian models with partially connected architectures that are guided by predefined SNP-set annotations.
+ 
+ ## Installation and Dependencies
+ 
+ We implement BANNs in three different software packages. The first two are implemented in Python using Tensorflow and numpy, respectively. The third version is implemented in R. The dependencies and requirements needed to install and run each version of the BANN software may be found in the README of the corresponding subdirectories. 
+ 
+ ## Tutorial and Examples
+ 
+ For each version of the software, we also provide example code and a toy dataset which illustrate how to use BANNs and conduct multi-scale genomic inference. 
 
 # INPUT FILES
 * `X`: Genotype matrix of size N by P where N is the number of individuals and P is the number of SNPs.
