@@ -1,23 +1,37 @@
-# ML-GSEA
-Note: This README is a work in progress as well as the rest of the repository. I'll try to keep things as organized and easy to understand as possible.
+# BANN
+Multi-scale Genomic Inference using Biologically Annotated Neural Networks with Variational Expectation-Maximization Algorithm.
+ 
+# DEPENDENCIES
+We implement BANNs using Tensorflow, numpy and R. For each version, please check the dependencies requirements in each subdirectory. 
 
-### ORGANIZATION OF THE REPO
-- Most of the code is in the folder "src". 
-- /scripts has useful code that isn't directly related to the tool (e.g. experiments, streamlining stuff, code for formatting data to use other tools)
-- I removed our data from the /Data folder and won't be pushing it to GitHub. But I kept the guide files and test files there since that's public info anyway. 
+# INSTALLATION
+For each version, please check the installation instructions in each subdirectory.
 
-### DEPENDENCIES
-The packages the current code depends on are listed in requirements.txt 
+# INPUT FILES
+* `X`: Genotype matrix of size N by P where N is the number of individuals and P is the number of SNPs.
+* `y`: Phenotype file of N rows where N is the number of individuals and each row stores the continuous phenotype value. 
+* `mask`: Mask matrix of size P by G where P is the number of SNPs and G is the number of SNP sets (genes). Each column is a vector filled with 0s and 1s with 1 indicates the appearance of the corresponding SNP of that row within the gene of that column and vice versa.  
 
-### INPUT FILES
-Depending on whether one is working with gene-level inference or pathway-level inference, there are either 4 or 5 files required:
+# TUTORIAL
+For each version, we provide an example code and a toy example data in the corresponding subdirectory to illustrate how to use BANNs. Please check accordingly.
 
-1) X, the genotype matrix: .csv file
-2) y, the phenotype matrices: .csv file   [can do .bed as well]
-(I generate X and y by writing RData to tab delimeted files in R)
-3) .map file for SNP List: PLINK formatted .map file (https://www.cog-genomics.org/plink2/formats#map)
-4) Gene range list file (e.g. glist_hg19), format described here: https://www.cog-genomics.org/plink/1.9/resources
-5) If working with pathway-level inference: pathway guide file, MSigDB format. The default for this file is set to None so if it doesn't exist, we can carry out gene-level inference without needing it.
+# NOTES
+* Please make sure that the individual order (rows) of the genotype matrix X is the same with phenotype file y.
+* Please make sure that the SNP order (columns) of genotype matrix X is the same with the mask file (rows). 
+* We report the results according to the order of the input files. For example, the Posterior Inclusion Probabilities (PIPs) of genes are ordered in the same way to the order of the maks file (columns). 
+
+# RELEVANT CITATIONS
+
+
+# QUESTIONS AND FEEDBACK
+For questions or concerns with BANNs, please contact [Pinar Demetci](mailto:pinar_demetci@brown.edu), [Wei Cheng](mailto:wei_cheng1@brown.edu), [Lorin Crawford](mailto:lorin_crawford@brown.edu).
+
+We appreciate any feedback you may have with our software and/or instructions.
+
+
+
+
+
 
 
 
