@@ -44,8 +44,8 @@ Details and statistical derivations of the BANN framework can be found in Method
 ## Other Notes on the Software
 
 * Please make sure that the order of individuals (rows) in the genotype matrix `X` matches the order of individuals in the phenotype file `y`.
-* Please make sure that the SNP order (i.e., the columns) of genotype matrix `X` is the same as order in the mask file (i.e., the rows). 
-* We report the results according to the order of these input files. For example, the PIPs for SNP-set will be returned in the same way that they were ordered in the mak file (i.e., along the columns). 
+* Please make sure that the SNP order (i.e., the columns) of genotype matrix `X` is the same as order in the `mask` file (i.e., the rows). 
+* We report the results according to the order of these input files. For example, the PIPs for SNP-set will be returned in the same way that they were ordered in the `mask` file (i.e., along the columns). 
 
 ## RELEVANT CITATIONS
 
