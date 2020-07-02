@@ -97,24 +97,21 @@ def innerLoop(X,y,xy,d,tau,sigma,logodds,alpha,mu,update_order,tol,maxiter,outer
   res["s"]=s
   return res
 
-def estimatePVE(model, X, nr = 1000):
+def estimatePVE(model, X):
   '''
   estimate model PVE
   '''
-  p  = X.shape[1]
+  p=X.shape[1]
   numModels=len(model["logw"])
-  pve=np.repeat(0,nr)*1.0
-  for i in range(0,nr):
+  pve=np.repeat(0.0,100)
+  for i in range(0,100):
     j = np.random.choice(numModels,1,p=model["w"])
-    b = np.reshape(model["s"][:,j], (model["s"][:,j].shape[0],)) + np.sqrt(np.reshape(model["s"][:,j], (model["s"][:,j].shape[0],)))*np.random.normal(0,1,p)
-    temp = np.random.uniform(0,1,p)-np.reshape(model["s"][:,j], (model["s"][:,j].shape[0],))
-    onehot = np.zeros(p)
-    onehot[np.where(temp>0)]=1
-    b = b*onehot
-    sz = np.var(np.matmul(X, b))
-    pve[i] = sz/(sz+model["tau"][j])[0]
+    b=model["mu"][:,j]+np.sqrt(model["s"][:,j])*np.random.normal(0,1,p)
+    b=b*(np.random.uniform(0,1,p)<model["alpha"][:,j])
+    sz=var1(np.matmul(X, b))
+    pve[i]=sz/(sz+model["tau"][j])
   return np.mean(pve)
-
+  
 def outerloop(X, I, y, xy, d, SIy, SIX, tau, sigma, logodds, alpha, mu, update_order,tol,maxiter,outer_iter):
   #number of features
   p=X.shape[1]
@@ -131,3 +128,5 @@ def outerloop(X, I, y, xy, d, SIy, SIX, tau, sigma, logodds, alpha, mu, update_o
   res["logw"]= res["logw"][numiter-1]
   return res
 
+
+ 

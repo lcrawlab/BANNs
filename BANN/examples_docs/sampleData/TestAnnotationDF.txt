@@ -1,0 +1,9 @@
+	GeneID	Chromosome	Start	End	SNPindex	VariantID
+0	Gene3	18	240.0	391.0	[2]	['rs3']
+1	Gene4	18	1023.0	1803.0	[3, 4]	['rs4', 'rs5']
+2	Gene6	19	587.0	791.0	[5]	['rs5']
+3	Gene7	19	9532.0	10187.0	[7]	['rs7']
+4	Gene8	X	1.0	501.0	[9, 10]	['rs9', 'rs10']
+5	Gene9	X	2675.0	5092.0	[12]	['rs12']
+6	Gene10	X	4061.0	9582.0	[12]	['rs12']
+7	UnAnnotated				[1, 0, 6, 8, 11]	['rs1', 'rs2', 'rs6', 'rs8', 'rs11']

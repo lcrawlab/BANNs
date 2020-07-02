@@ -1,6 +1,7 @@
 from utils import *
 from customModel_iterative import *
 import time
+import numpy as np
 
 def BANNvarEM(X, y, centered=False, numModels=20, tol=1e-4, maxiter=1e4, show_progress = True):
 	'''
@@ -83,7 +84,7 @@ def BANNvarEM(X, y, centered=False, numModels=20, tol=1e-4, maxiter=1e4, show_pr
 	temp_res = {"b":b,"logw":logw, "w":w, "tau":tau, "sigma":sigma,"logodds":logodds, "alpha":alpha,
 			  "mu":mu, "s":s, "pip":pip, "beta":beta, "beta_cov":beta_cov}
 	### estiamte model PVE
-	pve = estimatePVE(temp_res, X, nr = 1000)
+	pve = estimatePVE(temp_res, X)
 	results = {"b":b,"logw":logw, "w":w, "tau":tau, "sigma":sigma,"logodds":logodds, "alpha":alpha,
 			  "mu":mu, "s":s, "pip":pip, "beta":beta, "beta_cov":beta_cov, "pve":pve}
 	return results

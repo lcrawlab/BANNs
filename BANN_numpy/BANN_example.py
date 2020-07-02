@@ -14,11 +14,13 @@ res = BANN(X, mask, y, centered=True, numModels=20, tol=1e-4, maxiter=1e4, show_
 
 #access results
 #SNP layer posterior inclusion probability
-#res["SNP_res"]["pip"]
+SNPpips=res["SNP_res"]["pip"]
 #SNP layer PVE
-#res["SNP_res"]["pve"]
+SNP_pve=res["SNP_res"]["pve"]
 
 #gene layer posterior inclusion probability
-# res["SNPset_res"]["pip"]
+SNPset_pips=res["SNPset_res"]["pip"]
 #gene layer PVE
-# res["SNPset_res"]["pve"]
+SNPset_pve=res["SNPset_res"]["pve"]
+
+print(SNP_pve,SNPset_pve)
