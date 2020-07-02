@@ -37,7 +37,7 @@ The interpretation of the second point naturally arises from the fact that all S
 We frame the BANN methodology as a Bayesian nonlinear mixed model with which we can perform classic variable selection. Some unique aspects about the model include:
 * We leverage the fact that using nonlinear activation functions for the neurons in the hidden layer implicitly account for both additive and non-additive effects between SNPs within a given SNP-set 
 * The weights and connections of the neural network as random variables with sparse prior distributions that reflect how genetic effects are manifested at different genomic scales.
-* We use a variational expectation-maximization (EM) algorithm to infer posterior inclusion probabilities (PIPs) for SNPs and SNP-sets. This algorithm is very similar to that proposed by [Cabronetto and Stephens (2012)](https://projecteuclid.org/euclid.ba/1339616726).
+* We use a variational expectation-maximization (EM) algorithm to infer posterior inclusion probabilities (PIPs) for SNPs and SNP-sets. This algorithm is very similar to that proposed by [Cabronetto and Stephens (2012)](https://projecteuclid.org/euclid.ba/1339616726) and [Carbonetto, Zhou, and Stephens (2017)](https://arxiv.org/abs/1709.06597).
 
 Details and statistical derivations of the BANN framework can be found in Methods and Supplementary Notes of the citation below.
 
