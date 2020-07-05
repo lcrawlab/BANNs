@@ -300,7 +300,7 @@ def annotate(path_SNPList, path_geneGuide,  outputFile, intergenic=False, buffer
 	dfAnnotation.to_csv(outputFile, sep="\t")
 	return dfAnnotation
 
-def getMaskMatrix(path_SNPList, annotationDF, outputFile):
+def getMaskMatrix(SNPList_path, annotationDF, outputFile):
 	"""
 	Function to create he corresponding SNP - to- SNP-set annotation mask, which is a sparse matrix that guides the connections of the hidden layer of BANN model. 
 	Called by the user.
