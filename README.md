@@ -49,10 +49,10 @@ Details and statistical derivations of the BANN framework can be found in Method
 
 ## RELEVANT CITATIONS
 
-P. Demetci*, W. Cheng*, G. Darnell, X. Zhou, S. Ramachandran, and L. Crawford. Multi-scale Genomic Inference using Biologically Annotated Neural Networks. _biorxiv_. 184465.
+P. Demetci*, W. Cheng*, G. Darnell, X. Zhou, S. Ramachandran, and L. Crawford. Multi-scale Genomic Inference using Biologically Annotated Neural Networks. _PLOS Genetics_ **17**(8): e1009754.
 
 ## QUESTIONS AND FEEDBACK
-For questions or concerns with BANN software, please contact [Pinar Demetci](mailto:pinar_demetci@brown.edu), [Wei Cheng](mailto:wei_cheng1@brown.edu), or [Lorin Crawford](mailto:lorin_crawford@brown.edu).
+For questions or concerns with BANN software, please contact [Pinar Demetci](mailto:pinar_demetci@brown.edu), [Wei Cheng](mailto:wei_cheng1@brown.edu), or [Lorin Crawford](mailto:lcrawford@microsoft.com).
 
 We welcome and appreciate any feedback you may have with our software and/or instructions.
 
